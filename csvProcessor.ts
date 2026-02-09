@@ -3,7 +3,6 @@ export const parseCSV = (content: string): { headers: string[], rows: any[] } =>
   const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
   if (lines.length === 0) return { headers: [], rows: [] };
 
-  // Simple CSV parser that handles basic quoting
   const parseLine = (line: string) => {
     const result = [];
     let cur = '';
@@ -14,7 +13,7 @@ export const parseCSV = (content: string): { headers: string[], rows: any[] } =>
         inQuotes = !inQuotes;
       } else if (char === ',' && !inQuotes) {
         result.push(cur.trim());
-        cur = '';
+        cur = '';s
       } else {
         cur += char;
       }
@@ -29,9 +28,7 @@ export const parseCSV = (content: string): { headers: string[], rows: any[] } =>
     const row: Record<string, any> = {};
     headers.forEach((header, index) => {
       let val: any = values[index];
-      // Try to parse as number if possible
       if (val && !isNaN(Number(val.replace(/[^0-9.-]+/g, ""))) && val !== '') {
-         // Keep string if it's likely a phone number or ID (long string of digits)
          if (val.length < 15) {
             const num = Number(val.replace(/[^0-9.-]+/g, ""));
             val = num;
